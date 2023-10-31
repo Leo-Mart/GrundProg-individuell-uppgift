@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
     <title>Mini-reddit</title>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Wrapper för hela layouten-->
     <div class="wrapper">
-        <!-- Header med en enkel navbar under, evntuellt skapa poster här? eller mer kanske searchbar/logga/någon annan knapp och lägga naven under?-->
-        <header class="main-header">HEADER</header>
-        <nav class="main-nav">
-            <ul>
-                <li><a>Nav 1</a></li>
-                <li><a>Nav 1</a></li>
-                <li><a>Nav 1</a></li>
-            </ul>
-        </nav>
-        <!-- Här kommer alla posts att ligga, med en container för varje-->
-        <main class="main-content">
-            <!-- Gömmer denna så länge, tanken är att skapa nya containers med JS och appenda dem till denna delen-->
-            <!-- <article class="post-container">
+      <!-- Header med en enkel navbar under, evntuellt skapa poster här? eller mer kanske searchbar/logga/någon annan knapp och lägga naven under?-->
+      <header class="main-header">HEADER</header>
+      <nav class="main-nav">
+        <ul>
+          <li><a>Nav 1</a></li>
+          <li><a>Nav 1</a></li>
+          <li><a>Nav 1</a></li>
+        </ul>
+      </nav>
+      <!-- Här kommer alla posts att ligga, med en container för varje-->
+      <main class="main-content">
+        <!-- Gömmer denna så länge, tanken är att skapa nya containers med JS och appenda dem till denna delen-->
+        <!-- <article class="post-container">
                 <h3 class="post-title">Test</h3>
                  Styla dessa lite snyggar, kanske concatenate redan i JS koden?
                 <div class="post-tags">här ska det vara små taggar</div>
@@ -29,15 +29,29 @@
                     text text text tex text texty text text
                 </p>
             </article> -->
-            <button class="getPostBtn">get new post</button>
-        </main>
-        <!-- en aside med create posts?-->
-        <aside class="sidebar">
+        <section class="modal hidden">
+          <div class="modal-container">
+            <h3>Create New Post</h3>
+            <label for="post-title">Title</label>
+            <input id="post-title" type="text" />
 
-        </aside>
-        <!--Standard footer med lite länkar/socials/copyright-->
-        <footer class="main-footer">FOOTER</footer>
+            <label for="post-tags">Tags</label>
+            <input id="post-tags" type="text" />
+
+            <label for="post-text">Text</label>
+            <textarea id="post-text"placeholder="enter you text..."></textarea>
+
+            <button class="btn btn-create-post">Create Post</button>
+            <span class="close">&times;</span>
+          </div>
+        </section>
+        <button class="btn btn-open-modal">Create new post</button>
+      </main>
+      <!-- en aside med create posts?-->
+      <aside class="sidebar"></aside>
+      <!--Standard footer med lite länkar/socials/copyright-->
+      <footer class="main-footer">FOOTER</footer>
     </div>
     <script src="main.js"></script>
-</body>
+  </body>
 </html>

@@ -27,27 +27,6 @@ btn = document.getElementsByClassName("getPostBtn");
 
 btn[0].addEventListener("click", getPost); */
 
-/* function getPost() {
-    fetch('https://dummyjson.com/posts/')
-    .then(res => res.json())
-    .then(post => {
-        let mainContainer = document.getElementsByClassName("main-content")
-        let postContainer = document.createElement("article");
-
-        let postTitle = document.createElement("h3")
-        let postText = document.createElement("p")
-        let postTags = document.createElement("span")
-        
-        postTitle.innerText = post.posts[0].title;
-        postText.innerText = post.posts[0].body;
-        postTags.innerText = post.posts[0].tags;
-
-        postContainer.append(postTitle, postTags, postText);
-        mainContainer[0].append(postContainer);
-      
-    });
-}
- */
 function getPost() {
   fetch("https://dummyjson.com/posts/")
     .then((res) => res.json())
@@ -71,19 +50,51 @@ function getPost() {
 }
 
 getPost();
-// sparar denna här utifall något går fel
-/* function getPost() {
-    fetch('https://dummyjson.com/posts/1')
-    .then(res => res.json())
-    .then(post => {
-        let postTitle = document.getElementsByClassName("post-title");
-        let postText = document.getElementsByClassName("post-text");
-        let postTags = document.getElementsByClassName("post-tags")
+
+let postContainer = document.createElement("article");
+let mainContainer = document.getElementsByClassName("main-content");
+// Modal för create post delen
+let modal = document.getElementsByClassName("modal")[0];
+let btnOpenModal = document.getElementsByClassName("btn-open-modal")[0];
+let btnCloseModal = document.getElementsByClassName("close")[0];
+
+function openModal() {
+    modal.classList.remove("hidden")
+}
+
+function closeModal() {
+    modal.classList.add("hidden")
+}
+
+btnOpenModal.addEventListener("click", openModal);
+
+btnCloseModal.addEventListener("click", closeModal);
+
+// ta info från input fält i modal och skapa en post med denna info sedan append till main
+
+function createPost() {
+
+    let inputTitle = document.getElementById("post-title");
+    let inputTags = document.getElementById("post-tags");
+    let inputText = document.getElementById("post-text");
+
+    let postTitle = document.createElement("h3")
+    let postText = document.createElement("p")
+    let postTags = document.createElement("span")
+
     
-    
-        postTitle[0].innerText = post.title;
-        postText[0].innerText = post.body;
-        postTags[0].innerText = post.tags;
-      
-    });
-} */
+    postTitle.innerText = inputTitle.value;
+    postText.innerText = inputText.value;
+    postTags.innerText = inputTags.value;
+    console.log(postTitle);
+    postContainer.append(postTitle, postTags, postText);
+    mainContainer[0].append(postContainer);
+
+    closeModal();
+
+}
+
+// hämta create post knappen och kör createPost() funktionen på denna
+let btnCreatePost = document.getElementsByClassName("btn-create-post");
+console.log(btnCreatePost[0]);
+btnCreatePost[0].addEventListener("click", createPost);
