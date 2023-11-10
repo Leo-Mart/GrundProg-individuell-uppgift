@@ -1,31 +1,3 @@
-// ok så detta verkar också funka, så vad jag behöver göra nu är att
-// hämta alla posts och loopa igenom dem samt skriva ut dem med denna funktion
-// antar jag?
-/* function getPost() {
-    fetch('https://dummyjson.com/posts/1')
-    .then(res => res.json())
-    .then(post => {
-        let mainContainer = document.getElementsByClassName("main-content")
-        let postContainer = document.createElement("article");
-
-        let postTitle = document.createElement("h3")
-        let postText = document.createElement("p")
-        let postTags = document.createElement("span")
-    
-        
-        postTitle.innerText = post.title;
-        postText.innerText = post.body;
-        postTags.innerText = post.tags;
-
-        postContainer.append(postTitle, postTags, postText);
-        mainContainer[0].append(postContainer);
-      
-    });
-}
-
-btn = document.getElementsByClassName("getPostBtn");
-
-btn[0].addEventListener("click", getPost); */
 // ****** DECLARATIONS *******
 // declaring these in the global scope so they are accessable by everthying that want to create new posts or need to use them to manipulate posts, I think there is a better way to do this but not sure how
 let mainContainer = document.getElementsByClassName("main-content");
@@ -39,7 +11,6 @@ let postReactions = document.createElement("span");
 
 // ****** INITAL POST-FETCHING *******
 // fetches all the post from dummyjson and dynamically creates new elements in which to display them
-// might have to make this an asynchrounos function and wait for the response somehow?
 fetch("https://dummyjson.com/posts")
   .then((res) => res.json())
   .then((post) => {
@@ -79,11 +50,6 @@ fetch("https://dummyjson.com/posts")
       );
       mainContainer[0].append(postContainer);
     }
-    // so this will give me a nodelist with all the buttons, but I've no clue of how to access it outside of this function
-    // is the log on line 103 running before the fetch is done? therefore there is no data to put in it
-    // it seems like the issue is that this code is asynchronus so it wait for the whole thing to finish, the log on line 103 runs as soon as the thing launches
-    // so presumably the same happens with the eventlistener when it tries to run, there are simply nothing to access yet.
-    // honestly this feels a bit to advanced for me, which to be fair is probably why it's part of the higher grade requirement, but maybe there is an easier way of doing it?
   });
 // ****** EVENTS *******
 // opens the modal
@@ -93,13 +59,6 @@ btnCloseModal.addEventListener("click", closeModal);
 //creates a new post using the createPost function
 btnCreatePost[0].addEventListener("click", createPost);
 
-/* setTimeout(logKek, 2000);
-
-// so this is a very ugly solution but now I should be able to access this nodelist of buttons trying to add an eventlisteten still throws an error
-setTimeout(() => {
-  console.log(likeBtns);
-}, 1000);
- */
 // ****** FUNCTIONS *******
 // might be a bit overkill to make these functions, but makes them easier to reuse down the line I suppose
 function openModal() {
@@ -115,13 +74,9 @@ function likes(e) {
     e.currentTarget.parentElement.querySelector(".post-reactions").innerText;
   counter++;
   element.innerText = counter;
-} // I think this works? huge shoutout to john smilgas project tutorials. Not sure how exactly but I'll take it. Now there is no cap so the user can just give a post likes to their hearts content and the same user can like however many times they want too, but still.
-/* function logKek(){
-  likeBtns.addEventListener('click', function(e){
-    console.log(e);
-  })
-  
-} */
+} // I think this works? huge shoutout to john smilgas project tutorials.
+// Not sure how exactly but I'll take it. Now there is no cap so the user can just give a post likes to their hearts content and the same user can like however many times they want too, but still.
+// it also doesn't work for the user created posts, only the fetched posts.
 
 // reads info from the input fields in the modal and then creates a new post and adds it to the end of the other posts.
 function createPost() {
@@ -138,7 +93,7 @@ function createPost() {
   likeBtn.addEventListener("click", likes); // by adding the eventlistener here it seems like I can access it even outside?
   likeBtn.classList.add("btn");
   likeBtn.classList.add("like-btn");
-  let postLikeIcon = document.createElement("i");
+  let postLikeIcon = document.createElement("i"); // this doesnt work on the post that the user can create by themselves, for some reason it selects only the main ones in the fetch
   postLikeIcon.classList.add("fa-regular");
   postLikeIcon.classList.add("fa-heart");
   likeBtn.append(postLikeIcon);
