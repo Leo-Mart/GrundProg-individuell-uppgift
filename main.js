@@ -1,5 +1,7 @@
 // ****** DECLARATIONS *******
-// declaring these in the global scope so they are accessable by everthying that want to create new posts or need to use them to manipulate posts, I think there is a better way to do this but not sure how
+// declaring these in the global scope so they are accessable by everthying that want to create new posts or need to use them to manipulate posts,
+// I think there is a better way to do this but not sure how
+// might want to replace some of these with queryselectors, possibly a little more streamlined than having to specify the index everywhere
 let mainContainer = document.getElementsByClassName("main-content");
 let postContainer = null;
 let modal = document.getElementsByClassName("modal")[0];
@@ -18,18 +20,24 @@ fetch("https://dummyjson.com/posts")
       // creating the elements for the content dynamically
       postContainer = document.createElement("article");
       postContainer.classList.add("post-container");
+
       let postTitle = document.createElement("h3");
       postTitle.classList.add("post-title");
+
       let postText = document.createElement("p");
       postText.classList.add("post-text");
+
       let postTags = document.createElement("span");
       postTags.classList.add("post-tags");
+
       postReactions = document.createElement("span");
       postReactions.classList.add("post-reactions");
+
       likeBtn = document.createElement("button");
       likeBtn.addEventListener("click", likes); // by adding the eventlistener here it seems like I can access it even outside?
       likeBtn.classList.add("btn");
       likeBtn.classList.add("like-btn");
+
       let postLikeIcon = document.createElement("i");
       postLikeIcon.classList.add("fa-regular");
       postLikeIcon.classList.add("fa-heart");
@@ -69,7 +77,8 @@ function closeModal() {
   modal.classList.add("hidden");
 }
 function likes(e) {
-  element = e.currentTarget.parentElement.querySelector(".post-reactions");
+  let element = e.currentTarget.parentElement.querySelector(".post-reactions");
+  console.log(element);
   counter =
     e.currentTarget.parentElement.querySelector(".post-reactions").innerText;
   counter++;
@@ -78,22 +87,38 @@ function likes(e) {
 // Not sure how exactly but I'll take it. Now there is no cap so the user can just give a post likes to their hearts content and the same user can like however many times they want too, but still.
 // it also doesn't work for the user created posts, only the fetched posts.
 
-// reads info from the input fields in the modal and then creates a new post and adds it to the end of the other posts.
+// reads info from the input fields in the modal anda then creates a new post and adds it to the end of the other posts.
 function createPost() {
-  let inputTitle = document.getElementById("post-title");
-  let inputTags = document.getElementById("post-tags");
-  let inputText = document.getElementById("post-text");
+  postContainer = document.createElement("article");
+  postContainer.classList.add("post-container");
+
+  let inputTitle = document.getElementById("post-title");  
+  let inputTags = document.getElementById("post-tags");  
+  let inputText = document.getElementById("post-text");  
 
   let postTitle = document.createElement("h3");
-  let postText = document.createElement("p");
-  let postTags = document.createElement("span");
-  let postReactions = document.createElement("span");
+  postTitle.classList.add("post-title");
 
+  let postText = document.createElement("p");
+  postText.classList.add("post-text");
+
+  let postTags = document.createElement("span");
+  postTags.classList.add("post-tags");
+
+  let postReactions = document.createElement("span");
+  postReactions.classList.add("post-reactions");
+console.log(postReactions);
   likeBtn = document.createElement("button");
   likeBtn.addEventListener("click", likes); // by adding the eventlistener here it seems like I can access it even outside?
   likeBtn.classList.add("btn");
   likeBtn.classList.add("like-btn");
-  let postLikeIcon = document.createElement("i"); // this doesnt work on the post that the user can create by themselves, for some reason it selects only the main ones in the fetch
+
+  let postLikeIcon = document.createElement("i"); // this doesnt work on the post that the user can create by themselves,
+  // for some reason it selects only the main ones in the fetch
+  // my assumption is that it still points to the last created post during the fetch and doesnt change that when a user creates a new post
+  // maybe because the fetched posts are created on load, but the create post button doesnt create a new post untill the user clicks it, for some reason it doesn't point to the user generated post after this?
+  // think I found the issue, the newly created post was not created properly, it was getting created into the same container as the last fetched post so it naturally pointed towards the containers button
+  // however now when I click the button it gives me an error main.js:83 Uncaught TypeError: Cannot read properties of null (reading 'innerText') but this was solved by a fixing a misstake on line 129 where I had put the value of postReactions to 0 instead of just the innertext
   postLikeIcon.classList.add("fa-regular");
   postLikeIcon.classList.add("fa-heart");
   likeBtn.append(postLikeIcon);
@@ -101,7 +126,7 @@ function createPost() {
   postTitle.innerText = inputTitle.value;
   postText.innerText = inputText.value;
   postTags.innerText = inputTags.value;
-  postReactions = 0;
+  postReactions.innerText = 0;
 
   postContainer.append(postTitle, postTags, postReactions, likeBtn, postText);
   mainContainer[0].append(postContainer);
