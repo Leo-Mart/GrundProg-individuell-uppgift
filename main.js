@@ -3,17 +3,20 @@
 // I think there is a better way to do this but not sure how
 // might want to replace some of these with queryselectors, possibly a little more streamlined than having to specify the index everywhere
 let mainContainer = document.getElementsByClassName("main-content");
-let postContainer = null;
+let postContainer;
+let reactionContainer;
 let modal = document.getElementsByClassName("modal")[0];
 let btnOpenModal = document.getElementsByClassName("btn-open-modal")[0];
 let btnCloseModal = document.getElementsByClassName("close")[0];
 let btnCreatePost = document.getElementsByClassName("btn-create-post");
 let likeBtn = document.createElement("button");
 let postReactions = document.createElement("span");
+let postStorage = [];
 
 // ****** INITAL POST-FETCHING *******
 // fetches all the post from dummyjson and dynamically creates new elements in which to display them
-fetch("https://dummyjson.com/posts")
+// only pulls 30 posts but that seems to be by default, as I understand it I can fetch all the posts by putting limit=0 in the fetch url
+fetch("https://dummyjson.com/posts?select=title,reactions,body,tags")
   .then((res) => res.json())
   .then((post) => {
     for (let i = 0; i < post.posts.length; i++) {
@@ -30,32 +33,33 @@ fetch("https://dummyjson.com/posts")
       let postTags = document.createElement("span");
       postTags.classList.add("post-tags");
 
+      reactionContainer = document.createElement("div");
+      reactionContainer.classList.add("reaction-container");
+
       postReactions = document.createElement("span");
       postReactions.classList.add("post-reactions");
 
       likeBtn = document.createElement("button");
-      likeBtn.addEventListener("click", likes); // by adding the eventlistener here it seems like I can access it even outside?
+      likeBtn.addEventListener("click", likes);
       likeBtn.classList.add("btn");
-      likeBtn.classList.add("like-btn");
+      likeBtn.classList.add("like-btn");      
 
       let postLikeIcon = document.createElement("i");
       postLikeIcon.classList.add("fa-regular");
       postLikeIcon.classList.add("fa-heart");
       likeBtn.append(postLikeIcon);
+      reactionContainer.append(postReactions, likeBtn);
 
+      // store the post in the postStorage array and then stores that in the local storage
+      postStorage.push(post.posts[i]);
+      localStorage.setItem("posts", JSON.stringify(postStorage));
       // putting the correct data into the correct element
       postTitle.innerText = post.posts[i].title;
       postText.innerText = post.posts[i].body;
       postTags.innerText = post.posts[i].tags;
       postReactions.innerText = post.posts[i].reactions;
       // appends the title, tags, reactions and actual text to its own container that is then appended to the main container for the posts
-      postContainer.append(
-        postTitle,
-        postTags,
-        postReactions,
-        likeBtn,
-        postText
-      );
+      postContainer.append(postTitle, postTags, reactionContainer, postText);
       mainContainer[0].append(postContainer);
     }
   });
@@ -66,6 +70,8 @@ btnOpenModal.addEventListener("click", openModal);
 btnCloseModal.addEventListener("click", closeModal);
 //creates a new post using the createPost function
 btnCreatePost[0].addEventListener("click", createPost);
+
+console.log(JSON.parse(localStorage.getItem("posts")));
 
 // ****** FUNCTIONS *******
 // might be a bit overkill to make these functions, but makes them easier to reuse down the line I suppose
@@ -78,23 +84,21 @@ function closeModal() {
 }
 function likes(e) {
   let element = e.currentTarget.parentElement.querySelector(".post-reactions");
-  console.log(element);
   counter =
     e.currentTarget.parentElement.querySelector(".post-reactions").innerText;
   counter++;
   element.innerText = counter;
 } // I think this works? huge shoutout to john smilgas project tutorials.
-// Not sure how exactly but I'll take it. Now there is no cap so the user can just give a post likes to their hearts content and the same user can like however many times they want too, but still.
-// it also doesn't work for the user created posts, only the fetched posts.
+//  Now there is no cap so the user can just give a post likes to their hearts content and the same user can like however many times they want too, but still.
 
-// reads info from the input fields in the modal anda then creates a new post and adds it to the end of the other posts.
+// reads info from the input fields in the modal and then creates a new post and adds it to the end of the other posts.
 function createPost() {
   postContainer = document.createElement("article");
   postContainer.classList.add("post-container");
 
-  let inputTitle = document.getElementById("post-title");  
-  let inputTags = document.getElementById("post-tags");  
-  let inputText = document.getElementById("post-text");  
+  let inputTitle = document.getElementById("post-title");
+  let inputTags = document.getElementById("post-tags");
+  let inputText = document.getElementById("post-text");
 
   let postTitle = document.createElement("h3");
   postTitle.classList.add("post-title");
@@ -105,13 +109,18 @@ function createPost() {
   let postTags = document.createElement("span");
   postTags.classList.add("post-tags");
 
+  reactionContainer = document.createElement("div");
+  reactionContainer.classList.add("reaction-container");
+
   let postReactions = document.createElement("span");
   postReactions.classList.add("post-reactions");
-console.log(postReactions);
+
   likeBtn = document.createElement("button");
-  likeBtn.addEventListener("click", likes); // by adding the eventlistener here it seems like I can access it even outside?
+  likeBtn.addEventListener("click", likes);
   likeBtn.classList.add("btn");
   likeBtn.classList.add("like-btn");
+
+  
 
   let postLikeIcon = document.createElement("i"); // this doesnt work on the post that the user can create by themselves,
   // for some reason it selects only the main ones in the fetch
@@ -122,32 +131,34 @@ console.log(postReactions);
   postLikeIcon.classList.add("fa-regular");
   postLikeIcon.classList.add("fa-heart");
   likeBtn.append(postLikeIcon);
+  reactionContainer.append(postReactions, likeBtn);
+
+  // creates a object with the post info for storing in the localstorage
+  const userPost = {
+    title: inputTitle.value,
+    body: inputText.value,
+    tags: inputTags.value,
+    reactions: 0,
+  };
+
+  // add the newly created userpost to the postStorage array and adds the array to the localstorage again
+  postStorage.push(userPost);
+  localStorage.setItem("posts", JSON.stringify(postStorage));
 
   postTitle.innerText = inputTitle.value;
   postText.innerText = inputText.value;
   postTags.innerText = inputTags.value;
   postReactions.innerText = 0;
 
-  postContainer.append(postTitle, postTags, postReactions, likeBtn, postText);
+  postContainer.append(postTitle, postTags, reactionContainer, postText);
   mainContainer[0].append(postContainer);
 
   closeModal();
 }
 
-// rent funktionellt tror jag sidan är mer eller mindre färdig? åtminstone om jag förstår beskrivningen rätt.
-// för VG måste jag lägga in likes/reactions. Har sett att det finns en sådan property inbakad i datan från dummyJSON
-// antar då att det handlar om att visa den och om man då trcker på en "like" knapp ska denna gå upp med ett.
-// typ likes = post.posts.reactions sedan likes++; tror detta borde vara möjligt redan, men kan hända att det är pilligare än jag tror
-
-// att få dit reactions var ju inte så svårt, inte riktigt samma kanske på att göra egna poster, dock borde jag kunna köra något liknande relativt enkelt
-// reactions visar sig svårare än jag trodde. Att få den att visa dem är ju inga problem men att sedan komma åt det så att jag kan manipulera det verkar det stora hindret för mig just nu. Antar att det är något med scoping som jag missar
-// kanske måste jag lägga in värden i en annan variable som jag sedan kan komma åt utifrån. Framförallt får jag inte åtkomst till knapparna just nu. Antagligen får jag välja alla knapparna och sedan loopa igenom för att se vilken jag klickat på (forEach?)
-// för att sedan knyta det till rätt post och rätt reactions och eventuellt skapa en counter variable som jag sedan ökar med ett per klick.
-// extra steg här är ju också att se till att varje unik användare kan bara "like" en post en gång, men det kanske kräver lite mer avancerad kod än vad jag kan för tillfället? Någon from av auth, logga IP eller något?
-
-// Har börjat kolla på localstorage en del också, det verkar inte supersvårt men skenet brukar bedra
-// så local storage kan bara lagra strings. Därmed måste jag konvertera det jag vill ha i localstorage till en string genom json.stringify för att sedan konvertera från string tillbaka till object eller liknande så använder jag json.parse
-// sedan är det localstorage.setitem för att lagra
-// localstorage.getitem för att hämta.
+// what I have so far: I'm fetching the posts from dummyjson and storing them locally. User created posts are also stored locally and added to the same key as the fetched posts.
+// on a reload however it fetches all the posts again and overwrites what exists in the localstorage.
+// presumably I have to do an if statemnet when the page loads that checks wheter or not there is any data in the localstorage and if there is load that instead of the fetch
+// and the lasty I suppose I have to make sure the posts get saved again if I press the reaction button possibly in the likes function?
 
 // passande commits har jag försökt göra från början så förhoppningsvis är det steget klart av VG kraven
