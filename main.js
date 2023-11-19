@@ -13,56 +13,18 @@ let likeBtn = document.createElement("button");
 let postReactions = document.createElement("span");
 let postStorage = [];
 
-// ****** INITAL POST-FETCHING *******
-// fetches all the post from dummyjson and dynamically creates new elements in which to display them
-// only pulls 30 posts but that seems to be by default, as I understand it I can fetch all the posts by putting limit=0 in the fetch url
-fetch("https://dummyjson.com/posts?select=title,reactions,body,tags")
-  .then((res) => res.json())
-  .then((post) => {
-    for (let i = 0; i < post.posts.length; i++) {
-      // creating the elements for the content dynamically
-      postContainer = document.createElement("article");
-      postContainer.classList.add("post-container");
+// ******TESTING SOME IF STUFF**********
+// so my thinking here is that by checking if there is something to fetch from local storage it should do that first, otherwise it will fetch the data from dummyjson.
+// so far this seems to work, currently though im onnly checking if there is any data, im not actually doing anything with it.
+// so I probably have to get the data from localstorage, assign it to an array (poststorage?) and then use that array to populate the site with the posts, much like I did below with the fetch data.
+// this probably would've been much nicer with functions
+if (JSON.parse(localStorage.getItem("posts"))) {
+  getLocalData();
+} else { 
+  getRemoteData();
+}
 
-      let postTitle = document.createElement("h3");
-      postTitle.classList.add("post-title");
-
-      let postText = document.createElement("p");
-      postText.classList.add("post-text");
-
-      let postTags = document.createElement("span");
-      postTags.classList.add("post-tags");
-
-      reactionContainer = document.createElement("div");
-      reactionContainer.classList.add("reaction-container");
-
-      postReactions = document.createElement("span");
-      postReactions.classList.add("post-reactions");
-
-      likeBtn = document.createElement("button");
-      likeBtn.addEventListener("click", likes);
-      likeBtn.classList.add("btn");
-      likeBtn.classList.add("like-btn");      
-
-      let postLikeIcon = document.createElement("i");
-      postLikeIcon.classList.add("fa-regular");
-      postLikeIcon.classList.add("fa-heart");
-      likeBtn.append(postLikeIcon);
-      reactionContainer.append(postReactions, likeBtn);
-
-      // store the post in the postStorage array and then stores that in the local storage
-      postStorage.push(post.posts[i]);
-      localStorage.setItem("posts", JSON.stringify(postStorage));
-      // putting the correct data into the correct element
-      postTitle.innerText = post.posts[i].title;
-      postText.innerText = post.posts[i].body;
-      postTags.innerText = post.posts[i].tags;
-      postReactions.innerText = post.posts[i].reactions;
-      // appends the title, tags, reactions and actual text to its own container that is then appended to the main container for the posts
-      postContainer.append(postTitle, postTags, reactionContainer, postText);
-      mainContainer[0].append(postContainer);
-    }
-  });
+// ******END OF TESTING SOME IF STUFF**********
 // ****** EVENTS *******
 // opens the modal
 btnOpenModal.addEventListener("click", openModal);
@@ -70,8 +32,6 @@ btnOpenModal.addEventListener("click", openModal);
 btnCloseModal.addEventListener("click", closeModal);
 //creates a new post using the createPost function
 btnCreatePost[0].addEventListener("click", createPost);
-
-console.log(JSON.parse(localStorage.getItem("posts")));
 
 // ****** FUNCTIONS *******
 // might be a bit overkill to make these functions, but makes them easier to reuse down the line I suppose
@@ -82,6 +42,7 @@ function openModal() {
 function closeModal() {
   modal.classList.add("hidden");
 }
+
 function likes(e) {
   let element = e.currentTarget.parentElement.querySelector(".post-reactions");
   counter =
@@ -120,8 +81,6 @@ function createPost() {
   likeBtn.classList.add("btn");
   likeBtn.classList.add("like-btn");
 
-  
-
   let postLikeIcon = document.createElement("i"); // this doesnt work on the post that the user can create by themselves,
   // for some reason it selects only the main ones in the fetch
   // my assumption is that it still points to the last created post during the fetch and doesnt change that when a user creates a new post
@@ -156,9 +115,112 @@ function createPost() {
   closeModal();
 }
 
+function getRemoteData() {
+  // ****** INITAL POST-FETCHING *******
+  // fetches all the post from dummyjson and dynamically creates new elements in which to display them
+  // only pulls 30 posts but that seems to be by default, as I understand it I can fetch all the posts by putting limit=0 in the fetch url
+  // this wont run if there already is some data in the localstorage
+
+  fetch("https://dummyjson.com/posts?select=title,reactions,body,tags")
+    .then((res) => res.json())
+    .then((post) => {
+      for (let i = 0; i < post.posts.length; i++) {
+        // creating the elements for the content dynamically
+        postContainer = document.createElement("article");
+        postContainer.classList.add("post-container");
+
+        let postTitle = document.createElement("h3");
+        postTitle.classList.add("post-title");
+
+        let postText = document.createElement("p");
+        postText.classList.add("post-text");
+
+        let postTags = document.createElement("span");
+        postTags.classList.add("post-tags");
+
+        reactionContainer = document.createElement("div");
+        reactionContainer.classList.add("reaction-container");
+
+        postReactions = document.createElement("span");
+        postReactions.classList.add("post-reactions");
+
+        likeBtn = document.createElement("button");
+        likeBtn.addEventListener("click", likes);
+        likeBtn.classList.add("btn");
+        likeBtn.classList.add("like-btn");
+
+        let postLikeIcon = document.createElement("i");
+        postLikeIcon.classList.add("fa-regular");
+        postLikeIcon.classList.add("fa-heart");
+        likeBtn.append(postLikeIcon);
+        reactionContainer.append(postReactions, likeBtn);
+
+        // store the post in the postStorage array and then stores that in the local storage
+        postStorage.push(post.posts[i]);
+        localStorage.setItem("posts", JSON.stringify(postStorage));
+        // putting the correct data into the correct element
+        postTitle.innerText = post.posts[i].title;
+        postText.innerText = post.posts[i].body;
+        postTags.innerText = post.posts[i].tags;
+        postReactions.innerText = post.posts[i].reactions;
+        // appends the title, tags, reactions and actual text to its own container that is then appended to the main container for the posts
+        postContainer.append(postTitle, postTags, reactionContainer, postText);
+        mainContainer[0].append(postContainer);
+      }
+    });
+}
+
+function getLocalData() {
+  postStorage = JSON.parse(localStorage.getItem("posts"));
+  for (let i = 0; i < postStorage.length; i++) {
+    // creating the elements for the content dynamically
+    postContainer = document.createElement("article");
+    postContainer.classList.add("post-container");
+
+    let postTitle = document.createElement("h3");
+    postTitle.classList.add("post-title");
+
+    let postText = document.createElement("p");
+    postText.classList.add("post-text");
+
+    let postTags = document.createElement("span");
+    postTags.classList.add("post-tags");
+
+    reactionContainer = document.createElement("div");
+    reactionContainer.classList.add("reaction-container");
+
+    postReactions = document.createElement("span");
+    postReactions.classList.add("post-reactions");
+
+    likeBtn = document.createElement("button");
+    likeBtn.addEventListener("click", likes);
+    likeBtn.classList.add("btn");
+    likeBtn.classList.add("like-btn");
+
+    let postLikeIcon = document.createElement("i");
+    postLikeIcon.classList.add("fa-regular");
+    postLikeIcon.classList.add("fa-heart");
+    likeBtn.append(postLikeIcon);
+    reactionContainer.append(postReactions, likeBtn);
+
+    /* // store the post in the postStorage array and then stores that in the local storage
+      postStorage.push(post.posts[i]);
+      localStorage.setItem("posts", JSON.stringify(postStorage)); */
+    // putting the correct data into the correct element
+    postTitle.innerText = postStorage[i].title;
+    postText.innerText = postStorage[i].body;
+    postTags.innerText = postStorage[i].tags;
+    postReactions.innerText = postStorage[i].reactions;
+    // appends the title, tags, reactions and actual text to its own container that is then appended to the main container for the posts
+    postContainer.append(postTitle, postTags, reactionContainer, postText);
+    mainContainer[0].append(postContainer);
+  }
+}
 // what I have so far: I'm fetching the posts from dummyjson and storing them locally. User created posts are also stored locally and added to the same key as the fetched posts.
 // on a reload however it fetches all the posts again and overwrites what exists in the localstorage.
 // presumably I have to do an if statemnet when the page loads that checks wheter or not there is any data in the localstorage and if there is load that instead of the fetch
 // and the lasty I suppose I have to make sure the posts get saved again if I press the reaction button possibly in the likes function?
 
-// passande commits har jag försökt göra från början så förhoppningsvis är det steget klart av VG kraven
+// so I think I'm almost done with the functionallity? Main thing left as far as I know is that it's currently just saving the initial value of reactions not the updated on. So i'll have to save that value somewhere. possibly in the likes function.
+// I think i'll also break out the data fetching from dummyjson and locally to a function, makes it look a little cleaner possibly
+// then is just styling left
