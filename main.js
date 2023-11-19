@@ -13,18 +13,17 @@ let likeBtn = document.createElement("button");
 let postReactions = document.createElement("span");
 let postStorage = [];
 
-// ******TESTING SOME IF STUFF**********
-// so my thinking here is that by checking if there is something to fetch from local storage it should do that first, otherwise it will fetch the data from dummyjson.
-// so far this seems to work, currently though im onnly checking if there is any data, im not actually doing anything with it.
-// so I probably have to get the data from localstorage, assign it to an array (poststorage?) and then use that array to populate the site with the posts, much like I did below with the fetch data.
-// this probably would've been much nicer with functions
+// ******* END OF DECLARATIONS********
+
+// ******* INITAL POST FETCHING********
+// this bit fetches the data from localStorage is there is anything otherwise it fetches the data fom dummyjson and dynamically creates the posts on the page.
 if (JSON.parse(localStorage.getItem("posts"))) {
   getLocalData();
 } else { 
   getRemoteData();
 }
+// ******* END OF INITAL POST FETCHING********
 
-// ******END OF TESTING SOME IF STUFF**********
 // ****** EVENTS *******
 // opens the modal
 btnOpenModal.addEventListener("click", openModal);
@@ -33,8 +32,10 @@ btnCloseModal.addEventListener("click", closeModal);
 //creates a new post using the createPost function
 btnCreatePost[0].addEventListener("click", createPost);
 
+// ******* END OF EVENTS*******
+
 // ****** FUNCTIONS *******
-// might be a bit overkill to make these functions, but makes them easier to reuse down the line I suppose
+// open and close modal functions are only for adding or removeing the class from the modal to show/hide it. Might just bake these into the function/eventlistener above 
 function openModal() {
   modal.classList.remove("hidden");
 }
@@ -115,8 +116,9 @@ function createPost() {
   closeModal();
 }
 
+// fetches the data from dummyjson and dynamically creates post with it
 function getRemoteData() {
-  // ****** INITAL POST-FETCHING *******
+
   // fetches all the post from dummyjson and dynamically creates new elements in which to display them
   // only pulls 30 posts but that seems to be by default, as I understand it I can fetch all the posts by putting limit=0 in the fetch url
   // this wont run if there already is some data in the localstorage
@@ -169,7 +171,7 @@ function getRemoteData() {
       }
     });
 }
-
+// fetches the data from localstorage and dynamically creates post with it
 function getLocalData() {
   postStorage = JSON.parse(localStorage.getItem("posts"));
   for (let i = 0; i < postStorage.length; i++) {
@@ -216,11 +218,8 @@ function getLocalData() {
     mainContainer[0].append(postContainer);
   }
 }
-// what I have so far: I'm fetching the posts from dummyjson and storing them locally. User created posts are also stored locally and added to the same key as the fetched posts.
-// on a reload however it fetches all the posts again and overwrites what exists in the localstorage.
-// presumably I have to do an if statemnet when the page loads that checks wheter or not there is any data in the localstorage and if there is load that instead of the fetch
-// and the lasty I suppose I have to make sure the posts get saved again if I press the reaction button possibly in the likes function?
 
+
+// ***** TODO *******
 // so I think I'm almost done with the functionallity? Main thing left as far as I know is that it's currently just saving the initial value of reactions not the updated on. So i'll have to save that value somewhere. possibly in the likes function.
-// I think i'll also break out the data fetching from dummyjson and locally to a function, makes it look a little cleaner possibly
 // then is just styling left
