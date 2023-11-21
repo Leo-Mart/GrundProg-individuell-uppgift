@@ -222,4 +222,6 @@ function getLocalData() {
 
 // ***** TODO *******
 // so I think I'm almost done with the functionallity? Main thing left as far as I know is that it's currently just saving the initial value of reactions not the updated on. So i'll have to save that value somewhere. possibly in the likes function.
+// my current theory here is that I can possibly use the ID key that is contained in the object by default from dummyjson to make sure I select the correct post then update the saved value for reactions in the localstorage.
+// problem with that is that the user created posts wont have any ID so i'd have to create one for them as well. Granted that should be pretty easy to do, the crux is making sure they dont get the same values that the fetched posts have.
 // then is just styling left

@@ -6,32 +6,31 @@
     <!--STYLESHEET LINK-->
     <link rel="stylesheet" href="style.css" />
     <!-- FONT AWESOME IMPORT-->
-    <script src="https://kit.fontawesome.com/b4437118bd.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/b4437118bd.js"
+      crossorigin="anonymous"
+    ></script>
     <title>Mini-reddit</title>
   </head>
   <body>
-    <!-- Wrapper för hela layouten-->
+    <!-- Wrapper for the layout-->
     <div class="wrapper">
-      <!-- Header med en enkel navbar under, evntuellt skapa poster här? eller mer kanske searchbar/logga/någon annan knapp och lägga naven under?-->
+      <!-- header with a simple navbar, none of these links will lead anywhere-->
       <header class="main-header">HEADER</header>
       <nav class="main-nav">
-        <ul>
+        <ul class="nav-list">
           <li><a>Nav 1</a></li>
           <li><a>Nav 1</a></li>
           <li><a>Nav 1</a></li>
         </ul>
       </nav>
-      <!-- Här kommer alla posts att ligga, med en container för varje-->
+      <!-- All the posts will be here, with a container for each that is then wrapped in another container-->
       <main class="main-content">
-        <!-- Gömmer denna så länge, tanken är att skapa nya containers med JS och appenda dem till denna delen-->
         <!-- <article class="post-container">
-                <h3 class="post-title">Test</h3>
-                 Styla dessa lite snyggar, kanske concatenate redan i JS koden?
-                <div class="post-tags">här ska det vara små taggar</div>
-                <p class="post-text">
-                    text text text tex text texty text text
-                </p>
-            </article> -->
+          <h3 class="post-title">Test</h3>
+          <div class="post-tags"></div>
+          <p class="post-text"></p>
+        </article> -->
         <section class="modal hidden">
           <div class="modal-container">
             <h3>Create New Post</h3>
@@ -42,7 +41,7 @@
             <input id="post-tags" type="text" />
 
             <label for="post-text">Text</label>
-            <textarea id="post-text"placeholder="enter you text..."></textarea>
+            <textarea id="post-text" placeholder="enter you text..."></textarea>
 
             <button class="btn btn-create-post">Create Post</button>
             <span class="close">&times;</span>
@@ -50,9 +49,9 @@
         </section>
         <button class="btn btn-open-modal">Create new post</button>
       </main>
-      <!-- en aside med create posts?-->
+      <!-- an aside/sidebar for buttons/ads or whatever you heart desires-->
       <aside class="sidebar"></aside>
-      <!--Standard footer med lite länkar/socials/copyright-->
+      <!--basic footer with some links or other info-->
       <footer class="main-footer">FOOTER</footer>
     </div>
     <script src="main.js"></script>
