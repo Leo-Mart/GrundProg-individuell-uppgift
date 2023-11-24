@@ -1,5 +1,4 @@
 * {
-
   --main-element-clr: rgb(51, 51, 53);
   --main-border-clr: rgb(105, 105, 105);
   --main-text-clr: rgb(218, 218, 218);
@@ -11,7 +10,7 @@
 body {
   background-color: #000000;
 }
-
+/* Defining the grid */
 .wrapper {
   display: grid;
 
@@ -23,9 +22,10 @@ body {
     ". content sidebar"
     "footer footer footer";
 }
-
+/* header and Nav styling */
 .main-header {
   grid-area: header;
+  color: var(--main-text-clr);
   background-color: var(--main-element-clr);
 }
 
@@ -33,61 +33,89 @@ body {
   border: 1px solid var(--main-border-clr);
   grid-area: nav;
   background-color: var(--main-element-clr);
+  border-radius: 5px;
 }
 
+.nav-list {
+  display: flex;
+  justify-content: space-evenly;
+  color: var(--main-text-clr);
+  list-style-type: none;
+}
+/* main area styling */
 .main-content {
   display: flex;
   flex-direction: column;
   border-radius: 5px;
   gap: 1rem;
   grid-area: content;
-  
 }
 
-.post-container{
+.post-container {
   padding: 1rem;
   border-radius: 5px;
   color: var(--main-text-clr);
   background-color: var(--main-element-clr);
   border: 1px solid var(--main-border-clr);
-
 }
 
+.reaction-container {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.reaction-container > .like-btn {
+  border: none;
+}
+
+.reaction-container > .like-btn:hover {
+  box-shadow: none;
+}
+
+.reaction-container > .like-btn > i:hover {
+  color: red;
+  
+}
+/* sidebar/aside styling */
 .sidebar {
   border: 1px solid var(--main-border-clr);
   grid-area: sidebar;
   background-color: var(--main-element-clr);
+  border-radius: 5px;
+  max-width: 80%;
 }
-
+/* footer styling */
 .main-footer {
   border: 1px solid var(--main-border-clr);
   grid-area: footer;
   background-color: var(--main-element-clr);
 }
-
-/* The Modal (background) */
+/* MODAL STYLING */
 .modal {
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  position: fixed;
+  z-index: 1;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
-/* Modal Content/Box */
 .modal-container {
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  background-color: #000000;
+  color: var(--main-text-clr);
+  display: flex;
+  flex-direction: column;
+  margin: 15% auto;
   padding: 20px;
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  border: 1px solid var(--main-border-clr);
+  width: 80%;
+  border-radius: 5px;
+  gap: 0.7rem;
 }
 
-/* The Close Button */
 .close {
   color: #aaa;
   float: right;
@@ -101,7 +129,21 @@ body {
   text-decoration: none;
   cursor: pointer;
 }
-/* Class for hiding/displaying the modal*/
+
 .hidden {
   display: none;
+}
+
+/* BUTTON STYLING */
+.btn {
+  background-color: var(--main-element-clr);
+  color: var(--main-text-clr);
+  border: 1px solid var(--main-border-clr);
+  height: 2rem;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  cursor: pointer;
+  box-shadow: 0px 0px 2px 2px rgb(255, 255, 255);
 }

@@ -55,7 +55,7 @@ function likes(e) {
   element.innerText = counter;
   // runs the editLikes function to update the value of reactions in the localstorage with the new value from counter after the user clicks the like button
   editLikes(idSelect, counter);
-} 
+}
 // reads info from the input fields in the modal and then creates a new post and adds it to the end of the other posts.
 function createPost() {
   postContainer = document.createElement("article");
@@ -106,16 +106,30 @@ function createPost() {
   // add the newly created userpost to the postStorage array and adds the array to the localstorage again
   postStorage.push(userPost);
   localStorage.setItem("posts", JSON.stringify(postStorage));
+  // checks if there is any actual value to store, so the user can't create empty posts
+  if (
+    inputTitle.value === "" ||
+    inputText.value === "" ||
+    inputTags.value === ""
+  ) {
+    alert("Please enter some text!");
+    console.log("runs");
+  } else {
+    postTitle.innerText = inputTitle.value;
+    postText.innerText = inputText.value;
+    postTags.innerText = inputTags.value;
+    postReactions.innerText = 0;
+    console.log(inputTitle.value);
 
-  postTitle.innerText = inputTitle.value;
-  postText.innerText = inputText.value;
-  postTags.innerText = inputTags.value;
-  postReactions.innerText = 0;
+    postContainer.append(postTitle, postTags, reactionContainer, postText);
+    mainContainer[0].append(postContainer);
 
-  postContainer.append(postTitle, postTags, reactionContainer, postText);
-  mainContainer[0].append(postContainer);
-
-  closeModal();
+    // set the inputfields back empty if the user wants to create more posts, this way the old text won't still be there.
+    inputTitle.value = "";
+    inputTags.value = "";
+    inputText.value = "";
+    closeModal();
+  }
 }
 
 // fetches the data from dummyjson and dynamically creates post with it
@@ -218,7 +232,7 @@ function getLocalData() {
     postText.innerText = postStorage[i].body;
     postTags.innerText = postStorage[i].tags;
     postReactions.innerText = postStorage[i].reactions;
-    // appends the title, tags, reactions and actual text to its own container that is then appended to the main container for the posts
+    // appends the title, tags, reactions and actual text to its own container which in turn gets appended to the main container for the posts
     postContainer.append(postTitle, postTags, reactionContainer, postText);
     mainContainer[0].append(postContainer);
   }
@@ -240,7 +254,7 @@ function editLikes(id, value) {
   localStorage.setItem("posts", JSON.stringify(items));
 }
 // ***** TODO *******
-// so I think I'm almost done with the functionallity? Main thing left as far as I know is that it's currently just saving the initial value of reactions not the updated on. So i'll have to save that value somewhere. possibly in the likes function.
-// my current theory here is that I can possibly use the ID key that is contained in the object by default from dummyjson to make sure I select the correct post then update the saved value for reactions in the localstorage.
-// problem with that is that the user created posts wont have any ID so i'd have to create one for them as well. Granted that should be pretty easy to do, the crux is making sure they dont get the same values that the fetched posts have.
+// I belive that is pretty much it when it come to the required functionallity. The one thing I might want to change right now is the way I give the user created posts id
+// it doesn't really add up with the other ID's at the moment, but functionally it's the same.
+// came up with something else to add on the functionallity. Right now a user can create a post that is just empty. So I want to add in some form of error catching if the inputfields for the modal is empty it wont let the user create a post
 // then is just styling left
