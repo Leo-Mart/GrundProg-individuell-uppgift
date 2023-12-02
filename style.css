@@ -17,18 +17,48 @@ body {
   grid-template-columns: 1fr 3fr 1fr;
   gap: 1rem;
   grid-template-areas:
-    "header header header"
-    ". nav ."
-    ". content sidebar"
-    "footer footer footer";
+    'header header header'
+    '. nav .'
+    '. content sidebar'
+    'footer footer footer';
 }
 /* header and Nav styling */
 .main-header {
   grid-area: header;
   color: var(--main-text-clr);
   background-color: var(--main-element-clr);
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--main-border-clr);
+  border-radius: 0 5px 0 5px;
+  padding: 0.5rem;
 }
 
+/* search bar styling */
+.search-bar-container {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 60px;
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-bar-container > .search-bar {
+  background: transparent;
+  flex: 1;
+  border: 0;
+  outline: none;
+  color: var(--main-text-clr);
+}
+
+.search-btn {
+  border: 0;
+  border-radius: 50px;
+  background: transparent;
+  cursor: pointer;
+  color: white;
+}
 .main-nav {
   border: 1px solid var(--main-border-clr);
   grid-area: nav;
@@ -42,6 +72,7 @@ body {
   color: var(--main-text-clr);
   list-style-type: none;
 }
+
 /* main area styling */
 .main-content {
   display: flex;
@@ -75,7 +106,6 @@ body {
 
 .reaction-container > .like-btn > i:hover {
   color: red;
-  
 }
 /* sidebar/aside styling */
 .sidebar {
@@ -87,7 +117,7 @@ body {
 }
 /* footer styling */
 .main-footer {
-  border: 1px solid var(--main-border-clr);
+  border-top: 1px solid var(--main-border-clr);
   grid-area: footer;
   background-color: var(--main-element-clr);
 }
@@ -114,6 +144,12 @@ body {
   width: 80%;
   border-radius: 5px;
   gap: 0.7rem;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .close {

@@ -16,7 +16,16 @@
     <!-- Wrapper for the layout-->
     <div class="wrapper">
       <!-- header with a simple navbar, none of these links will lead anywhere-->
-      <header class="main-header">HEADER</header>
+      <header class="main-header">
+        <div class="logo">Should be a logo here</div>
+        <div class="search-bar-container">
+          <input type="text" class="search-bar" placeholder="Search..." />
+          <button class="search-btn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+        <div class="header-btns-conainer">possibly some buttons here</div>
+      </header>
       <nav class="main-nav">
         <ul class="nav-list">
           <li><a>Nav 1</a></li>
@@ -33,9 +42,11 @@
         </article> -->
         <section class="modal hidden">
           <div class="modal-container">
-            <h3>Create New Post</h3>
-            <span class="close">&times;</span>
-            
+            <div class="header-container">
+              <h3>Create New Post</h3>
+              <span class="close">&times;</span>
+            </div>
+
             <label for="post-title">Title</label>
             <input id="post-title" type="text" />
 
@@ -43,16 +54,20 @@
             <input id="post-tags" type="text" />
 
             <label for="post-text">Text</label>
-            <textarea id="post-text" placeholder="enter your text..."></textarea>
+            <textarea
+              id="post-text"
+              placeholder="enter your text..."
+            ></textarea>
 
             <button class="btn btn-create-post">Create Post</button>
-            
           </div>
         </section>
         <button class="btn btn-open-modal">Create new post</button>
       </main>
       <!-- an aside/sidebar for buttons/ads or whatever you heart desires-->
-      <aside class="sidebar"></aside>
+      <aside class="sidebar">
+        <h3>Space for ads, sidebars, or other</h3>
+      </aside>
       <!--basic footer with some links or other info-->
       <footer class="main-footer">FOOTER</footer>
     </div>
