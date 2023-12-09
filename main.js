@@ -74,6 +74,9 @@ function createPost() {
 
   let postTags = document.createElement('span');
   postTags.classList.add('post-tags');
+  // splits the tags into seperate elements and puts these into an array, I'd imageine this would have to be enforced somehow otherwise this will throw errors since users will not always write it correctly
+  let tags = inputTags.value;
+  let tagArray = tags.split(', ');
 
   reactionContainer = document.createElement('div');
   reactionContainer.classList.add('reaction-container');
@@ -97,7 +100,7 @@ function createPost() {
     id: attr,
     title: inputTitle.value,
     body: inputText.value,
-    tags: inputTags.value,
+    tags: tagArray,
     reactions: 0,
   };
 
@@ -111,18 +114,24 @@ function createPost() {
     inputTags.value === ''
   ) {
     alert('Please enter some text!');
-    console.log('runs');
   } else {
     postTitle.innerText = inputTitle.value;
     postText.innerText = inputText.value;
-    postTags.innerText = inputTags.value;
     postReactions.innerText = 0;
-    console.log(inputTitle.value);
+
+    // loops through the tags and makes them into clickable buttons, it seems to be reading from somewhere else on line 127 but it works?
+    for (i = 0; i < tagArray.length; i++) {
+      tag = tagArray[i];
+      let tagBtn = document.createElement('button');
+      tagBtn.classList.add('tagBtn');
+      tagBtn.innerText = tag;
+      postTags.append(tagBtn);
+    }
 
     postContainer.append(postTitle, postTags, reactionContainer, postText);
     mainContainer[0].append(postContainer);
 
-    // set the inputfields back empty if the user wants to create more posts, this way the old text won't still be there.
+    // set the inputfields back empty if the user wants to create more posts, this way the old text disappears after the user clicks the create post.
     inputTitle.value = '';
     inputTags.value = '';
     inputText.value = '';
@@ -180,8 +189,17 @@ function getRemoteData() {
         // putting the correct data into the correct element
         postTitle.innerText = post.posts[i].title;
         postText.innerText = post.posts[i].body;
-        postTags.innerText = post.posts[i].tags;
         postReactions.innerText = post.posts[i].reactions;
+
+        // loops through the tags to make them into clickable buttons
+        post.posts[i].tags.forEach((element) => {
+          tag = element;
+          let tagBtn = document.createElement('button');
+          tagBtn.classList.add('tagBtn');
+          tagBtn.innerText = element;
+          postTags.append(tagBtn);
+        });
+
         // appends the title, tags, reactions and actual text to its own container that is then appended to the main container for the posts
         postContainer.append(postTitle, postTags, reactionContainer, postText);
         mainContainer[0].append(postContainer);
@@ -228,8 +246,19 @@ function getLocalData() {
     // putting the correct data into the correct element
     postTitle.innerText = postStorage[i].title;
     postText.innerText = postStorage[i].body;
-    postTags.innerText = postStorage[i].tags;
     postReactions.innerText = postStorage[i].reactions;
+
+    // loops through the tags to make them into clickable buttons
+    // for some reason this works with firefox and chrome, but vivaldi gives me an error
+
+    for (j = 0; j < postStorage[i].tags.length; j++) {
+      tag = postStorage[i].tags[j];
+      let tagBtn = document.createElement('button');
+      tagBtn.classList.add('tagBtn');
+      tagBtn.innerText = tag;
+      postTags.append(tagBtn);
+    }
+
     // appends the title, tags, reactions and actual text to its own container which in turn gets appended to the main container for the posts
     postContainer.append(postTitle, postTags, reactionContainer, postText);
     mainContainer[0].append(postContainer);
@@ -245,12 +274,8 @@ function editLikes(id, value) {
     if (item.id === parseInt(id)) {
       item.reactions = value;
     }
-
-    console.log(item);
     return item;
   });
   localStorage.setItem('posts', JSON.stringify(items));
 }
-// ***** TODO *******
-// I belive that is pretty much it when it come to the required functionallity. The one thing I might want to change right now is the way I give the user created posts id
-// it doesn't really add up with the other ID's at the moment, but functionally it's the same.
+
