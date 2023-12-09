@@ -205,7 +205,6 @@ function getRemoteData() {
         mainContainer[0].append(postContainer);
       }
     });
-  console.log('hämtar remote');
 }
 // fetches the data from localstorage and dynamically creates post with it
 function getLocalData() {
@@ -264,7 +263,6 @@ function getLocalData() {
     postContainer.append(postTitle, postTags, reactionContainer, postText);
     mainContainer[0].append(postContainer);
   }
-  console.log('hämtar local');
 }
 
 function editLikes(id, value) {
@@ -280,7 +278,4 @@ function editLikes(id, value) {
   });
   localStorage.setItem('posts', JSON.stringify(items));
 }
-// ***** TODO *******
-// I belive that is pretty much it when it come to the required functionallity. The one thing I might want to change right now is the way I give the user created posts id
-// it doesn't really add up with the other ID's at the moment, but functionally it's the same.
-// possibly change the way I dispay tags, looks a bit ass right now.
+
