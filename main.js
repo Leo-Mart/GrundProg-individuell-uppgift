@@ -1,6 +1,6 @@
 // ****** DECLARATIONS *******
 // declaring these in the global scope so they are accessable by everthying that want to create new posts or need to use them to manipulate posts,
-let mainContainer = document.getElementsByClassName('main-content');
+let mainContainer = document.querySelector('.main-content');
 let postContainer;
 let reactionContainer;
 let modal = document.getElementsByClassName('modal')[0];
@@ -10,6 +10,7 @@ let btnCreatePost = document.getElementsByClassName('btn-create-post');
 let likeBtn = document.createElement('button');
 let postReactions = document.createElement('span');
 let postStorage = [];
+let themeBtn = document.querySelector('.theme-btn');
 
 // ******* END OF DECLARATIONS********
 
@@ -30,6 +31,8 @@ btnCloseModal.addEventListener('click', closeModal);
 //creates a new post using the createPost function
 btnCreatePost[0].addEventListener('click', createPost);
 
+// a switch between light and dark theme. Took the design for the button/slider from w3schools how-to
+themeBtn.addEventListener('click', switchTheme);
 // ******* END OF EVENTS*******
 
 // ****** FUNCTIONS *******
@@ -119,9 +122,9 @@ function createPost() {
     postText.innerText = inputText.value;
     postReactions.innerText = 0;
 
-    // loops through the tags and makes them into clickable buttons, it seems to be reading from somewhere else on line 127 but it works?
+    // loops through the tags and makes them into clickable buttons
     for (i = 0; i < tagArray.length; i++) {
-      tag = tagArray[i];
+      let tag = tagArray[i];
       let tagBtn = document.createElement('button');
       tagBtn.classList.add('tagBtn');
       tagBtn.innerText = tag;
@@ -129,7 +132,7 @@ function createPost() {
     }
 
     postContainer.append(postTitle, postTags, reactionContainer, postText);
-    mainContainer[0].append(postContainer);
+    mainContainer.append(postContainer);
 
     // set the inputfields back empty if the user wants to create more posts, this way the old text disappears after the user clicks the create post.
     inputTitle.value = '';
@@ -196,13 +199,13 @@ function getRemoteData() {
           tag = element;
           let tagBtn = document.createElement('button');
           tagBtn.classList.add('tagBtn');
-          tagBtn.innerText = element;
+          tagBtn.innerText = tag;
           postTags.append(tagBtn);
         });
 
         // appends the title, tags, reactions and actual text to its own container that is then appended to the main container for the posts
         postContainer.append(postTitle, postTags, reactionContainer, postText);
-        mainContainer[0].append(postContainer);
+        mainContainer.append(postContainer);
       }
     });
 }
@@ -249,7 +252,6 @@ function getLocalData() {
     postReactions.innerText = postStorage[i].reactions;
 
     // loops through the tags to make them into clickable buttons
-    // for some reason this works with firefox and chrome, but vivaldi gives me an error
 
     for (j = 0; j < postStorage[i].tags.length; j++) {
       tag = postStorage[i].tags[j];
@@ -261,7 +263,7 @@ function getLocalData() {
 
     // appends the title, tags, reactions and actual text to its own container which in turn gets appended to the main container for the posts
     postContainer.append(postTitle, postTags, reactionContainer, postText);
-    mainContainer[0].append(postContainer);
+    mainContainer.append(postContainer);
   }
 }
 
@@ -279,3 +281,32 @@ function editLikes(id, value) {
   localStorage.setItem('posts', JSON.stringify(items));
 }
 
+function switchTheme() {
+  let header = document.querySelector('.main-header');
+  let nav = document.querySelector('.main-nav');
+  let modalBtn = document.querySelector('.btn-open-modal');
+  let sidebar = document.querySelector('.sidebar');
+  let posts = document.querySelectorAll('.post-container');
+
+  if (themeBtn.checked === false) {
+    mainContainer.classList.add('light-mode');
+    document.body.classList.add('light-mode');
+    nav.classList.add('light-mode');
+    modalBtn.classList.add('light-mode');
+    sidebar.classList.add('light-mode');
+    header.classList.add('light-mode');
+    posts.forEach((container) => {
+      container.classList.add('light-mode');
+    });
+  } else if (themeBtn.checked === true) {
+    mainContainer.classList.remove('light-mode');
+    document.body.classList.remove('light-mode');
+    nav.classList.remove('light-mode');
+    modalBtn.classList.remove('light-mode');
+    sidebar.classList.remove('light-mode');
+    header.classList.remove('light-mode');
+    posts.forEach((container) => {
+      container.classList.remove('light-mode');
+    });
+  }
+}
