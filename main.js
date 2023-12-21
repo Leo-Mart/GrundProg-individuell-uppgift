@@ -108,8 +108,7 @@ function createPost() {
   };
 
   // add the newly created userpost to the postStorage array and adds the array to the localstorage again
-  postStorage.push(userPost);
-  localStorage.setItem('posts', JSON.stringify(postStorage));
+
   // checks if there is any actual value to store, so the user can't create empty posts
   if (
     inputTitle.value === '' ||
@@ -131,6 +130,8 @@ function createPost() {
       postTags.append(tagBtn);
     }
 
+    postStorage.push(userPost);
+    localStorage.setItem('posts', JSON.stringify(postStorage));
     postContainer.append(postTitle, postTags, reactionContainer, postText);
     mainContainer.append(postContainer);
 
